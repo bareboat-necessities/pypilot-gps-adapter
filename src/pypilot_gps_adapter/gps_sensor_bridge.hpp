@@ -1,6 +1,8 @@
 #pragma once
 
+#include <pypilot_data_model.hpp>
 #include <pypilot_sensors/samples.hpp>
+#include <pypilot_sensors/sensors_manager.hpp>
 #include "gps_fix.hpp"
 
 namespace pypilot_gps_adapter {
@@ -43,5 +45,23 @@ inline pypilot_sensors::SensorBatch<Real> make_gps_batch(const GpsFixInput<Real>
     batch.gps = make_gps_sample(fix);
     return batch;
 }
+
+template<typename Real = float>
+class GpsSensorBridge {
+public:
+    pypilot_sensors::GpsSample<Real> sample_from_fix(const GpsFixInput<Real>& fix) const {
+        return make_gps_sample(fix);
+    }
+
+    pypilot_sensors::SensorBatch<Real> batch_from_fix(const GpsFixInput<Real>& fix) const {
+        return make_gps_batch(fix);
+    }
+
+    bool apply_fix(pypilot_data_model::DataModel<Real>& model,
+                   pypilot_sensors::SensorsManager<Real>& sensors,
+                   const GpsFixInput<Real>& fix) const {
+        return sensors.apply_batch(model, batch_from_fix(fix));
+    }
+};
 
 } // namespace pypilot_gps_adapter
