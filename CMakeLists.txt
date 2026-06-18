@@ -27,6 +27,7 @@ if(PYPILOT_GPS_ADAPTER_BUILD_TESTS)
     endfunction()
 
     add_gps_adapter_test(test_gps_filter_math tests/test_gps_filter_math.cpp)
+    add_gps_adapter_test(test_gps_filter tests/test_gps_filter.cpp)
     add_gps_adapter_test(test_gpsd_json tests/test_gpsd_json.cpp)
     add_gps_adapter_test(test_gps_sensor_bridge tests/test_gps_sensor_bridge.cpp)
 endif()
