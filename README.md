@@ -30,13 +30,14 @@ gpsd / raw GPS / filtered GPS
 This module owns:
 
 * GPS fix input structs
-* GPS coordinate math from original `pypilot/gps_filter.py`
 * gpsd TPV JSON parsing into GPS fix input
 * GPS fix to `pypilot_sensors::GpsSample` conversion
 * GPS fix to `pypilot_sensors::SensorBatch` conversion
 * GPS fix application through `pypilot_sensors::SensorsManager`
 * future portable GPSFilter predict/update state
 * optional future Linux gpsd socket client
+
+GPS coordinate math from original `pypilot/gps_filter.py` is owned by `pypilot-algorithms` and re-exported here only for compatibility.
 
 This module does **not** own:
 
@@ -83,9 +84,13 @@ Linux-only gpsd socket code should stay behind a CMake/compile-time option and s
 
 Completed in this module so far:
 
-* Phase 4.1: portable `ll_to_xy` / `xy_to_ll` coordinate math, including dateline wrapping parity with original PyPilot
 * Phase 4.3: GPS fix to `GpsSample`, `SensorBatch`, and `SensorsManager` bridge APIs
+* compatibility forwarding header for Phase 4.1 GPS math from `pypilot-algorithms`
 * early gpsd TPV JSON parsing scaffold
+
+Completed in `pypilot-algorithms`:
+
+* Phase 4.1: portable `ll_to_xy` / `xy_to_ll` coordinate math, including dateline wrapping parity with original PyPilot
 
 Still pending:
 
