@@ -31,11 +31,11 @@ This module owns:
 
 * GPS fix input structs
 * gpsd TPV JSON parsing into GPS fix input
+* Linux-only gpsd socket client behind a CMake option
 * GPS fix to `pypilot_sensors::GpsSample` conversion
 * GPS fix to `pypilot_sensors::SensorBatch` conversion
 * GPS fix application through `pypilot_sensors::SensorsManager`
 * GPSFilter adapter wrapper between GPS fix structs and `pypilot-algorithms`
-* optional future Linux gpsd socket client
 
 GPS coordinate math and the portable 2D GPSFilter Kalman predict/update core from original `pypilot/gps_filter.py` are owned by `pypilot-algorithms` and re-exported/wrapped here only for adapter compatibility.
 
@@ -62,6 +62,15 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
+Build the optional Linux gpsd socket client and examples with:
+
+```bash
+cmake -S . -B build \
+  -DPYPILOT_GPS_ADAPTER_ENABLE_LINUX_GPSD=ON \
+  -DPYPILOT_GPS_ADAPTER_BUILD_EXAMPLES=ON
+cmake --build build
+```
+
 ## Arduino
 
 Use the Arduino Library Manager or local `--libraries` paths for all dependencies:
@@ -78,22 +87,19 @@ arduino-cli compile --fqbn arduino:avr:mega \
   pypilot-gps-adapter/examples/arduino/GpsAdapterExample
 ```
 
-Linux-only gpsd socket code should stay behind a CMake/compile-time option and should not be required for Arduino builds.
+Linux-only gpsd socket code is behind `PYPILOT_GPS_ADAPTER_ENABLE_LINUX_GPSD` and is not required for Arduino builds.
 
 ## Current scope
 
 Completed in this module so far:
 
 * Phase 4.3: GPS fix to `GpsSample`, `SensorBatch`, and `SensorsManager` bridge APIs
+* Phase 4.4: mode-aware gpsd TPV parser with device, `altHAE`, speed, track, and lat/lon support
+* Phase 4.5: Linux-only gpsd socket client with WATCH command, line reader, and TPV-to-fix reader
 * adapter wrapper for Phase 4.2 GPSFilter from `pypilot-algorithms`
 * compatibility forwarding header for Phase 4.1 GPS math from `pypilot-algorithms`
-* early gpsd TPV JSON parsing scaffold
 
 Completed in `pypilot-algorithms`:
 
 * Phase 4.1: portable `ll_to_xy` / `xy_to_ll` coordinate math, including dateline wrapping parity with original PyPilot
 * Phase 4.2: portable 2D GPSFilter Kalman predict/update core with fixed-size history replay
-
-Still pending:
-
-* Phase 4.5: Linux gpsd socket client
