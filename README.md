@@ -34,6 +34,7 @@ This module owns:
 * gpsd TPV JSON parsing into GPS fix input
 * GPS fix to `pypilot_sensors::GpsSample` conversion
 * GPS fix to `pypilot_sensors::SensorBatch` conversion
+* GPS fix application through `pypilot_sensors::SensorsManager`
 * future portable GPSFilter predict/update state
 * optional future Linux gpsd socket client
 
@@ -70,6 +71,9 @@ arduino-cli compile --fqbn arduino:avr:mega \
   --libraries pypilot-sensors \
   --libraries pypilot-data-model \
   --libraries pypilot-algorithms \
+  --libraries pypilot-nmea0183-connector \
+  --libraries pypilot-signalk-connector \
+  --libraries pypilot-servo-protocol \
   pypilot-gps-adapter/examples/arduino/GpsAdapterExample
 ```
 
@@ -77,6 +81,13 @@ Linux-only gpsd socket code should stay behind a CMake/compile-time option and s
 
 ## Current scope
 
-This is the initial Phase 4 scaffold. It includes portable GPS coordinate math, gpsd TPV JSON parsing, and bridge helpers that produce `pypilot-sensors` GPS samples and batches.
+Completed in this module so far:
 
-The full original PyPilot GPSFilter Kalman predict/update port is intentionally left for the next Phase 4 step.
+* Phase 4.1: portable `ll_to_xy` / `xy_to_ll` coordinate math, including dateline wrapping parity with original PyPilot
+* Phase 4.3: GPS fix to `GpsSample`, `SensorBatch`, and `SensorsManager` bridge APIs
+* early gpsd TPV JSON parsing scaffold
+
+Still pending:
+
+* Phase 4.2: full original PyPilot GPSFilter Kalman predict/update port
+* Phase 4.5: Linux gpsd socket client
