@@ -1,6 +1,6 @@
 #pragma once
 
-#include <pypilot_sensors.hpp>
+#include <pypilot_sensors/samples.hpp>
 #include "gps_fix.hpp"
 
 namespace pypilot_gps_adapter {
