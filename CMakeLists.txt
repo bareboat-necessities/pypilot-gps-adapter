@@ -10,6 +10,7 @@ set(PYPILOT_ALGORITHMS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../pypilot-algorithms/sr
 set(PYPILOT_SENSORS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../pypilot-sensors/src" CACHE PATH "Path to pypilot-sensors src")
 
 option(PYPILOT_GPS_ADAPTER_ENABLE_LINUX_GPSD "Build Linux gpsd socket client" OFF)
+option(PYPILOT_GPS_ADAPTER_BUILD_EXAMPLES "Build pypilot-gps-adapter examples" OFF)
 
 add_library(pypilot_gps_adapter STATIC src/pypilot_gps_adapter.cpp)
 if(PYPILOT_GPS_ADAPTER_ENABLE_LINUX_GPSD AND UNIX AND NOT APPLE)
@@ -20,6 +21,15 @@ target_include_directories(pypilot_gps_adapter PUBLIC
     ${PYPILOT_DATA_MODEL_DIR}
     ${PYPILOT_ALGORITHMS_DIR}
     ${PYPILOT_SENSORS_DIR})
+
+if(PYPILOT_GPS_ADAPTER_BUILD_EXAMPLES)
+    add_executable(gpsd_to_sensors examples/linux_gpsd_to_sensors.cpp)
+    target_link_libraries(gpsd_to_sensors PRIVATE pypilot_gps_adapter)
+    if(PYPILOT_GPS_ADAPTER_ENABLE_LINUX_GPSD AND UNIX AND NOT APPLE)
+        add_executable(gpsd_client_example examples/linux_gpsd_client.cpp)
+        target_link_libraries(gpsd_client_example PRIVATE pypilot_gps_adapter)
+    endif()
+endif()
 
 option(PYPILOT_GPS_ADAPTER_BUILD_TESTS "Build pypilot-gps-adapter tests" ON)
 
