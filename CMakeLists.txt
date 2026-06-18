@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(PYPILOT_DATA_MODEL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../pypilot-data-model/src" CACHE PATH "Path to pypilot-data-model src")
 set(PYPILOT_ALGORITHMS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../pypilot-algorithms/src" CACHE PATH "Path to pypilot-algorithms src")
 set(PYPILOT_SENSORS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../pypilot-sensors/src" CACHE PATH "Path to pypilot-sensors src")
+set(PYPILOT_SYSLIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../pypilot-syslib/src" CACHE PATH "Path to pypilot-syslib src")
 
 option(PYPILOT_GPS_ADAPTER_ENABLE_LINUX_GPSD "Build Linux gpsd socket client" OFF)
 option(PYPILOT_GPS_ADAPTER_BUILD_EXAMPLES "Build pypilot-gps-adapter examples" OFF)
@@ -20,7 +21,8 @@ target_include_directories(pypilot_gps_adapter PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${PYPILOT_DATA_MODEL_DIR}
     ${PYPILOT_ALGORITHMS_DIR}
-    ${PYPILOT_SENSORS_DIR})
+    ${PYPILOT_SENSORS_DIR}
+    ${PYPILOT_SYSLIB_DIR})
 
 if(PYPILOT_GPS_ADAPTER_BUILD_EXAMPLES)
     add_executable(gpsd_to_sensors examples/linux_gpsd_to_sensors.cpp)
