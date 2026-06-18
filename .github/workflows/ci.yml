@@ -39,3 +39,67 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build --output-on-failure
+
+  arduino:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pypilot-gps-adapter
+        uses: actions/checkout@v4
+        with:
+          path: pypilot-gps-adapter
+
+      - name: Checkout pypilot-data-model
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-data-model
+          path: pypilot-data-model
+
+      - name: Checkout pypilot-algorithms
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-algorithms
+          path: pypilot-algorithms
+
+      - name: Checkout pypilot-nmea0183-connector
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-nmea0183-connector
+          path: pypilot-nmea0183-connector
+
+      - name: Checkout pypilot-signalk-connector
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-signalk-connector
+          path: pypilot-signalk-connector
+
+      - name: Checkout pypilot-servo-protocol
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-servo-protocol
+          path: pypilot-servo-protocol
+
+      - name: Checkout pypilot-sensors
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-sensors
+          path: pypilot-sensors
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+
+      - name: Compile Arduino example
+        run: |
+          arduino-cli compile --fqbn arduino:avr:mega \
+            --libraries pypilot-gps-adapter \
+            --libraries pypilot-sensors \
+            --libraries pypilot-data-model \
+            --libraries pypilot-algorithms \
+            --libraries pypilot-nmea0183-connector \
+            --libraries pypilot-signalk-connector \
+            --libraries pypilot-servo-protocol \
+            pypilot-gps-adapter/examples/arduino/GpsAdapterExample
