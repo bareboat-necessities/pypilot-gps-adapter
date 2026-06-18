@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <pypilot_algorithms.hpp>
+#include <pypilot_sensors.hpp>
 #include <pypilot_gps_adapter.hpp>
 
 void setup() {
