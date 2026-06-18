@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdlib>
-#include <cstring>
+#include <stdlib.h>
+#include <string.h>
 #include "gps_fix.hpp"
 #include "gps_filter_math.hpp"
 
@@ -12,9 +12,9 @@ namespace detail {
 inline const char* find_key(const char* json, const char* key) {
     if (!json || !key) return 0;
     const char* p = json;
-    while ((p = std::strstr(p, key)) != 0) {
-        if (p > json && p[-1] == '"' && p[std::strlen(key)] == '"') {
-            p += std::strlen(key) + 1;
+    while ((p = strstr(p, key)) != 0) {
+        if (p > json && p[-1] == '"' && p[strlen(key)] == '"') {
+            p += strlen(key) + 1;
             while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') ++p;
             if (*p == ':') return p + 1;
         }
@@ -27,7 +27,7 @@ inline bool parse_number_field(const char* json, const char* key, double& out) {
     const char* p = find_key(json, key);
     if (!p) return false;
     char* end = 0;
-    const double value = std::strtod(p, &end);
+    const double value = strtod(p, &end);
     if (end == p) return false;
     out = value;
     return true;
@@ -42,7 +42,7 @@ public:
                    uint64_t now_us,
                    GpsFixInput<Real>& out,
                    const char* device_id = "gpsd") const {
-        if (!json || std::strstr(json, "\"TPV\"") == 0) return false;
+        if (!json || strstr(json, "\"TPV\"") == 0) return false;
 
         GpsFixInput<Real> fix;
         fix.time_us = now_us;
