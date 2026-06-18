@@ -34,10 +34,10 @@ This module owns:
 * GPS fix to `pypilot_sensors::GpsSample` conversion
 * GPS fix to `pypilot_sensors::SensorBatch` conversion
 * GPS fix application through `pypilot_sensors::SensorsManager`
-* future portable GPSFilter predict/update state
+* GPSFilter adapter wrapper between GPS fix structs and `pypilot-algorithms`
 * optional future Linux gpsd socket client
 
-GPS coordinate math from original `pypilot/gps_filter.py` is owned by `pypilot-algorithms` and re-exported here only for compatibility.
+GPS coordinate math and the portable 2D GPSFilter Kalman predict/update core from original `pypilot/gps_filter.py` are owned by `pypilot-algorithms` and re-exported/wrapped here only for adapter compatibility.
 
 This module does **not** own:
 
@@ -85,14 +85,15 @@ Linux-only gpsd socket code should stay behind a CMake/compile-time option and s
 Completed in this module so far:
 
 * Phase 4.3: GPS fix to `GpsSample`, `SensorBatch`, and `SensorsManager` bridge APIs
+* adapter wrapper for Phase 4.2 GPSFilter from `pypilot-algorithms`
 * compatibility forwarding header for Phase 4.1 GPS math from `pypilot-algorithms`
 * early gpsd TPV JSON parsing scaffold
 
 Completed in `pypilot-algorithms`:
 
 * Phase 4.1: portable `ll_to_xy` / `xy_to_ll` coordinate math, including dateline wrapping parity with original PyPilot
+* Phase 4.2: portable 2D GPSFilter Kalman predict/update core with fixed-size history replay
 
 Still pending:
 
-* Phase 4.2: full original PyPilot GPSFilter Kalman predict/update port
 * Phase 4.5: Linux gpsd socket client
