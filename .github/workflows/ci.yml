@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pypilot-gps-adapter
+        uses: actions/checkout@v4
+        with:
+          path: pypilot-gps-adapter
+
+      - name: Checkout pypilot-data-model
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-data-model
+          path: pypilot-data-model
+
+      - name: Checkout pypilot-algorithms
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-algorithms
+          path: pypilot-algorithms
+
+      - name: Checkout pypilot-sensors
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-sensors
+          path: pypilot-sensors
+
+      - name: Configure
+        run: cmake -S pypilot-gps-adapter -B build
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
