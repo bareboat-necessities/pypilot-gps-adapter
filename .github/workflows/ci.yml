@@ -31,6 +31,12 @@ jobs:
           repository: bareboat-necessities/pypilot-sensors
           path: pypilot-sensors
 
+      - name: Checkout pypilot-syslib
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-syslib
+          path: pypilot-syslib
+
       - name: Configure
         run: cmake -S pypilot-gps-adapter -B build
 
@@ -84,6 +90,12 @@ jobs:
           repository: bareboat-necessities/pypilot-sensors
           path: pypilot-sensors
 
+      - name: Checkout pypilot-syslib
+        uses: actions/checkout@v4
+        with:
+          repository: bareboat-necessities/pypilot-syslib
+          path: pypilot-syslib
+
       - name: Install Arduino CLI
         uses: arduino/setup-arduino-cli@v2
 
@@ -102,4 +114,5 @@ jobs:
             --libraries pypilot-nmea0183-connector \
             --libraries pypilot-signalk-connector \
             --libraries pypilot-servo-protocol \
+            --libraries pypilot-syslib \
             pypilot-gps-adapter/examples/arduino/GpsAdapterExample
