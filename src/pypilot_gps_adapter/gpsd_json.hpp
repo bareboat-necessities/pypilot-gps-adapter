@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pypilot_syslib.hpp>
 #include "gps_fix.hpp"
 #include "gps_filter_math.hpp"
 
@@ -69,18 +70,30 @@ inline bool parse_string_field(const char* json, const char* key, char* out, siz
 template<typename Real = float>
 class GpsdJsonParser {
 public:
-    GpsdJsonParser() { device_id_[0] = 0; }
+    GpsdJsonParser() : logger_(0) { device_id_[0] = 0; }
+
+    void set_logger(pypilot_syslib::Logger* logger) { logger_ = logger; }
+    pypilot_syslib::Logger* logger() const { return logger_; }
 
     bool parse_tpv(const char* json,
                    uint64_t now_us,
                    GpsFixInput<Real>& out,
                    const char* default_device_id = "gpsd") {
         char class_name[12];
-        if (!detail::parse_string_field(json, "class", class_name, sizeof(class_name))) return false;
-        if (strcmp(class_name, "TPV") != 0) return false;
+        if (!detail::parse_string_field(json, "class", class_name, sizeof(class_name))) {
+            log_rejected(now_us, 1);
+            return false;
+        }
+        if (strcmp(class_name, "TPV") != 0) {
+            log_rejected(now_us, 2);
+            return false;
+        }
 
         int mode = 0;
-        if (detail::parse_int_field(json, "mode", mode) && mode < 2) return false;
+        if (detail::parse_int_field(json, "mode", mode) && mode < 2) {
+            log_rejected(now_us, 3);
+            return false;
+        }
 
         GpsFixInput<Real> fix;
         fix.time_us = now_us;
@@ -120,11 +133,31 @@ public:
         }
 
         out = fix;
-        return fix.has_lat_lon || fix.has_speed || fix.has_track || fix.has_altitude;
+        const bool accepted = fix.has_lat_lon || fix.has_speed || fix.has_track || fix.has_altitude;
+        if (accepted) {
+            pypilot_syslib::log_if(logger_, now_us,
+                                   pypilot_syslib::LogLevel::Info,
+                                   pypilot_syslib::LogModule::GpsAdapter,
+                                   pypilot_syslib::LogEvent::GpsFixAccepted,
+                                   "gps fix accepted");
+        } else {
+            log_rejected(now_us, 4);
+        }
+        return accepted;
     }
 
 private:
+    void log_rejected(uint64_t now_us, int32_t reason) const {
+        pypilot_syslib::log_if(logger_, now_us,
+                               pypilot_syslib::LogLevel::Warn,
+                               pypilot_syslib::LogModule::GpsAdapter,
+                               pypilot_syslib::LogEvent::GpsFixRejected,
+                               "gps fix rejected",
+                               reason);
+    }
+
     char device_id_[80];
+    pypilot_syslib::Logger* logger_;
 };
 
 } // namespace pypilot_gps_adapter
