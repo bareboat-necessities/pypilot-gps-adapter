@@ -1,6 +1,6 @@
 #pragma once
 
-#include <pypilot_data_model.hpp>
+#include <ship_data_model.hpp>
 #include <pypilot_sensors/samples.hpp>
 #include <pypilot_sensors/sensors_manager.hpp>
 #include "gps_fix.hpp"
@@ -57,7 +57,7 @@ public:
         return make_gps_batch(fix);
     }
 
-    bool apply_fix(pypilot_data_model::DataModel<Real>& model,
+    bool apply_fix(ship_data_model::DataModel<Real>& model,
                    pypilot_sensors::SensorsManager<Real>& sensors,
                    const GpsFixInput<Real>& fix) const {
         return sensors.apply_batch(model, batch_from_fix(fix));
