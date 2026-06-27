@@ -8,7 +8,7 @@ static bool nearf(float a, float b) { return std::fabs(a - b) < 0.0001f; }
 int main() {
     pypilot_gps_adapter::GpsFixInput<float> fix;
     fix.time_us = 5000;
-    fix.source = pypilot_data_model::SensorSource::gpsd;
+    fix.source = ship_data_model::SensorSource::gpsd;
     fix.device_id = "gpsd0";
     fix.has_lat_lon = true;
     fix.latitude_deg = 41.0f;
@@ -24,7 +24,7 @@ int main() {
 
     const auto sample = pypilot_gps_adapter::make_gps_sample(fix);
     assert(sample.time_us == 5000);
-    assert(sample.source == pypilot_data_model::SensorSource::gpsd);
+    assert(sample.source == ship_data_model::SensorSource::gpsd);
     assert(sample.device_id && std::strcmp(sample.device_id, "gpsd0") == 0);
     assert(sample.fix_valid);
     assert(nearf(sample.latitude_deg, 41.0f));
@@ -40,17 +40,17 @@ int main() {
 
     const auto batch = pypilot_gps_adapter::make_gps_batch(fix);
     assert(batch.has_gps);
-    assert(batch.gps.source == pypilot_data_model::SensorSource::gpsd);
+    assert(batch.gps.source == ship_data_model::SensorSource::gpsd);
 
     const pypilot_gps_adapter::GpsSensorBridge<float> bridge;
     const auto bridge_sample = bridge.sample_from_fix(fix);
     assert(bridge_sample.speed_valid);
     assert(nearf(bridge_sample.speed_kn, 6.2f));
 
-    pypilot_data_model::DataModel<float> model;
+    ship_data_model::DataModel<float> model;
     pypilot_sensors::SensorsManager<float> sensors;
     assert(bridge.apply_fix(model, sensors, fix));
-    assert(model.navigation.gps.source.value == pypilot_data_model::SensorSource::gpsd);
+    assert(model.navigation.gps.source.value == ship_data_model::SensorSource::gpsd);
     assert(model.navigation.gps.last_update_us == 5000);
     assert(model.navigation.gps.speed_kn.valid);
     assert(nearf(model.navigation.gps.speed_kn.value, 6.2f));
