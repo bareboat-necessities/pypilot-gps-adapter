@@ -13,7 +13,7 @@ int main() {
     assert(parser.parse_tpv(tpv, 123456ULL, fix, "gpsd-test"));
 
     assert(fix.time_us == 123456ULL);
-    assert(fix.source == pypilot_data_model::SensorSource::gpsd);
+    assert(fix.source == ship_data_model::SensorSource::gpsd);
     assert(fix.device_id && std::strcmp(fix.device_id, "/dev/ttyUSB0") == 0);
     assert(fix.has_lat_lon);
     assert(nearf(fix.latitude_deg, 40.1f));
