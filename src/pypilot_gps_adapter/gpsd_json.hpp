@@ -97,7 +97,7 @@ public:
 
         GpsFixInput<Real> fix;
         fix.time_us = now_us;
-        fix.source = pypilot_data_model::SensorSource::gpsd;
+        fix.source = ship_data_model::SensorSource::gpsd;
         fix.device_id = default_device_id;
 
         if (detail::parse_string_field(json, "device", device_id_, sizeof(device_id_))) {
