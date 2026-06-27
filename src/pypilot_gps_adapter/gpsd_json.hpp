@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ship_data_model.hpp>
 #include <pypilot_syslib.hpp>
 #include "gps_fix.hpp"
 #include "gps_filter_math.hpp"
