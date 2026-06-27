@@ -8,7 +8,7 @@ void setup() {
 
     pypilot_gps_adapter::GpsFixInput<float> fix;
     fix.time_us = 1000000UL;
-    fix.source = pypilot_data_model::SensorSource::gpsd;
+    fix.source = ship_data_model::SensorSource::gpsd;
     fix.device_id = "gpsd-arduino";
     fix.has_lat_lon = true;
     fix.latitude_deg = 40.1f;
