@@ -26,7 +26,7 @@ struct GpsFixInput {
     Real declination_deg = Real(0);
 
     ship_data_model::SensorSource source = ship_data_model::SensorSource::gpsd;
-    const char* device_id = 0;
+    const char* device_id = nullptr;
 };
 
 template<typename Real = float>
