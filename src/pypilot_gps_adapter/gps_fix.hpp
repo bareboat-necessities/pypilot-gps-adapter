@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <pypilot_data_model.hpp>
+#include <ship_data_model.hpp>
 
 namespace pypilot_gps_adapter {
 
@@ -25,7 +25,7 @@ struct GpsFixInput {
     bool has_declination = false;
     Real declination_deg = Real(0);
 
-    pypilot_data_model::SensorSource source = pypilot_data_model::SensorSource::gpsd;
+    ship_data_model::SensorSource source = ship_data_model::SensorSource::gpsd;
     const char* device_id = 0;
 };
 
